@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fode Academy | Coaching Center</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Coaching<span>Academy</span></div>
+
+    {% comment %} <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Courses</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav> {% endcomment %}
+
+    <div class="nav-btns">
+    <a href="" class="btn-outline">Sign Up</a>
+    <a href="{% url 'login' %}" class="btn-fill">Login</a>
+</div>
+
+</header>
+
+<section class="hero">
+    <div class="hero-left">
+        <h1>
+            Crack Your Exams<br>
+            <span>With Expert Guidance</span>
+        </h1>
+
+        <p>
+            Join our coaching center for structured learning, experienced faculty,
+            doubt-clearing sessions, and guaranteed improvement.
+        </p>
+
+        <div class="price-box">
+            <span class="old-price">₹12,000</span>
+            <span class="new-price">₹7,999</span>
+            <button class="cta-btn">Enroll Now</button>
+        </div>
+
+        <div class="recommend">
+            <div class="avatar"></div>
+            <p>
+                Faculty Recommendation<br>
+                <span>Best for Boards & Competitive Exams</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <!-- Background Image -->
+        <img src="{% static 'images/hero.jpg' %}" alt="Coaching Students">
+
+        <div class="hero-card">
+            <h4>Special Batch Offer</h4>
+            <p>Class 10–12 | Science & Math</p>
+            <h2>₹7,999</h2>
+            <button>Join Batch</button>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

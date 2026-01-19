@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Left Side -->
+    <div class="left-side">
+        <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238" alt="Education">
+        <h2 class="logo">PreSkool</h2>
+    </div>
+
+    <!-- Right Side -->
+    <div class="right-side">
+        <h2>Register</h2>
+        <p>Access to our dashboard</p>
+
+        <form>
+            <input type="text" placeholder="First Name" required>
+            <input type="text" placeholder="Last Name" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Confirm Password" required>
+
+            <select required>
+                <option value="">-- Select Role --</option>
+                <option value="admin">Admin</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+            </select>
+
+            <button type="submit">Register</button>
+
+            <div class="divider">OR</div>
+
+            <div class="social-buttons">
+                <button class="fb">f</button>
+                <button class="google">G</button>
+            </div>
+
+            <p class="signup">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

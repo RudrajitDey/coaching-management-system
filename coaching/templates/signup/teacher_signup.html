@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Teacher Account</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/registerr.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Left Side -->
+    <div class="left-side">
+        <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238" alt="Education">
+        <h2 class="logo">PreSkool</h2>
+    </div>
+
+    <!-- Right Side -->
+    <div class="right-side">
+        <h2>Teacher Signup</h2>
+        <p>Create your teacher account</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Create</button>
+
+            <p class="signup">
+                Already have an account? 
+                <a href="{% url 'login' %}">Login</a>
+            </p>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

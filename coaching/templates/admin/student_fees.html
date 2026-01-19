@@ -1,0 +1,112 @@
+{% extends "dashboard/admin.html" %}
+{% block title %}Student Fees{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-container {
+        margin: 30px 0;
+    }
+
+    h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg, #6e27ff, #35b8ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: linear-gradient(135deg, #6e27ff, #b983ff);
+        color: white;
+    }
+
+    th {
+        padding: 18px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 15px 18px;
+        border-bottom: 1px solid #eee;
+    }
+
+    tbody tr:hover {
+        background: #f8f9ff;
+    }
+
+    .status-pending {
+        color: #e74c3c;
+        font-weight: 600;
+    }
+
+    .status-paid {
+        color: #27ae60;
+        font-weight: 600;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+        font-size: 16px;
+    }
+</style>
+
+<div class="page-container">
+    <h2>Student Fees Status</h2>
+
+    <div class="table-container">
+        {% if students %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Till Date</th>
+                        <th>Fee Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ student.get_full_name|default:student.username }}</td>
+                            <td>{{ student.student_class|default:"N/A" }}</td>
+                            <td>{{ student.fee_till_date|date:"Y-m-d"|default:"Not set" }}</td>
+                            <td>
+                                {% if student.fee_pending %}
+                                    <span class="status-pending">Pending</span>
+                                {% else %}
+                                    <span class="status-paid">Paid</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">
+                <p>No students found.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

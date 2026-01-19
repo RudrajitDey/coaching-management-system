@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-content {
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        background: linear-gradient(90deg, #6e27ff, #35b8ff);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 25px;
+        margin-top: 20px;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .card p {
+        color: #666;
+        line-height: 1.6;
+    }
+</style>
+
+<div class="page-content">
+    <h2>Student Dashboard</h2>
+    <p style="color: #666; font-size: 16px;">Welcome, {{ user.username }}!</p>
+</div>
+
+<div class="card">
+    <h3>Your Profile</h3>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email|default:"Not Set" }}</p>
+    <p><strong>Joined:</strong> {{ user.date_joined|date:"d M Y" }}</p>
+</div>
+
+<div class="card">
+    <h3>Quick Actions</h3>
+    <p>📥 Download Course Notes</p>
+    <p>📅 View Class Schedule</p>
+    <p>📝 Attempt Assignments</p>
+    <p>💰 View Fee Status</p>
+</div>
+
+{% endblock %}

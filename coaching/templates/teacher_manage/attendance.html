@@ -1,0 +1,333 @@
+{% extends 'dashboard/admin.html' %}
+{% load static %}
+
+{% block title %}Teacher Attendance Management{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/attendance.css' %}">
+
+<div class="attendance-container">
+    <!-- Header Section -->
+    <div class="attendance-header">
+        <div>
+            <h1><i class="bi bi-calendar-check"></i> Teacher Attendance Management</h1>
+            <p>Track and manage teacher attendance records</p>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="table-wrapper">
+        <table class="attendance-table">
+            <thead>
+                <tr>
+                    <th>Sl.</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Date Till</th>
+                    <th>Total Present</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceBody">
+                {% for record in attendance_data %}
+                <tr data-id="{{ record.id }}">
+                    <td>{{ record.sl }}</td>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.subject }}</td>
+                    <td>
+                        <input type="date" class="date-till-input" value="{{ record.date_till }}" readonly>
+                    </td>
+                    <td>
+                        <input type="number" class="total-present-input" value="{{ record.total_present }}" min="0" readonly>
+                    </td>
+                    <td>
+                        <button class="btn-action edit-btn" onclick="editRow(this)" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn-action save-btn" onclick="saveRow(this)" style="display:none;" title="Save">
+                            <i class="bi bi-check-circle"></i>
+                        </button>
+                        <button class="btn-action cancel-btn" onclick="cancelEdit(this)" style="display:none;" title="Cancel">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 20px; color: #999;">
+                        No teachers found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Save All Button -->
+    {% if attendance_data %}
+    <div class="action-buttons">
+        <button class="btn-save-all" onclick="saveAllChanges()">
+            <i class="bi bi-cloud-check"></i> Save All Changes
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-save-all {
+        background: #198754;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save-all:hover {
+        background: #157347;
+        transform: translateY(-2px);
+    }
+
+    .date-till-input,
+    .total-present-input {
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .date-till-input:read-only,
+    .total-present-input:read-only {
+        background: #f5f5f5;
+        cursor: not-allowed;
+    }
+
+    .date-till-input:not(:read-only),
+    .total-present-input:not(:read-only) {
+        background: #fff3cd;
+        border-color: #ffc107;
+    }
+
+    .date-till-input:focus,
+    .total-present-input:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+</style>
+
+<script>
+    const editedRows = new Set();
+
+    function editRow(button) {
+        const row = button.closest('tr');
+        const dateInput = row.querySelector('.date-till-input');
+        const presentInput = row.querySelector('.total-present-input');
+        const editBtn = row.querySelector('.edit-btn');
+        const saveBtn = row.querySelector('.save-btn');
+        const cancelBtn = row.querySelector('.cancel-btn');
+
+        dateInput.removeAttribute('readonly');
+        presentInput.removeAttribute('readonly');
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-flex';
+        cancelBtn.style.display = 'inline-flex';
+
+        const rowId = row.dataset.id;
+        editedRows.add(rowId);
+    }
+
+    function cancelEdit(button) {
+        const row = button.closest('tr');
+        const dateInput = row.querySelector('.date-till-input');
+        const presentInput = row.querySelector('.total-present-input');
+        const editBtn = row.querySelector('.edit-btn');
+        const saveBtn = row.querySelector('.save-btn');
+        const cancelBtn = row.querySelector('.cancel-btn');
+
+        // Reset to original values
+        dateInput.setAttribute('readonly', 'readonly');
+        presentInput.setAttribute('readonly', 'readonly');
+        editBtn.style.display = 'inline-flex';
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+
+        const rowId = row.dataset.id;
+        editedRows.delete(rowId);
+    }
+
+    function saveRow(button) {
+        const row = button.closest('tr');
+        const dateInput = row.querySelector('.date-till-input');
+        const presentInput = row.querySelector('.total-present-input');
+        const rowId = row.dataset.id;
+
+        if (!dateInput.value) {
+            alert('Please select a date');
+            return;
+        }
+
+        const data = {
+            id: rowId,
+            date_till: dateInput.value,
+            total_present: presentInput.value
+        };
+
+        fetch('{% url "teacher_attendance" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === 'success') {
+                const editBtn = row.querySelector('.edit-btn');
+                const saveBtn = row.querySelector('.save-btn');
+                const cancelBtn = row.querySelector('.cancel-btn');
+
+                dateInput.setAttribute('readonly', 'readonly');
+                presentInput.setAttribute('readonly', 'readonly');
+                editBtn.style.display = 'inline-flex';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+
+                editedRows.delete(rowId);
+                showNotification('Attendance record saved successfully', 'success');
+            } else {
+                showNotification('Error: ' + result.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error saving attendance', 'error');
+        });
+    }
+
+    function saveAllChanges() {
+        if (editedRows.size === 0) {
+            alert('No changes to save');
+            return;
+        }
+
+        const rows = document.querySelectorAll('#attendanceBody tr');
+        let savedCount = 0;
+
+        rows.forEach(row => {
+            const rowId = row.dataset.id;
+            if (editedRows.has(rowId)) {
+                const dateInput = row.querySelector('.date-till-input');
+                const presentInput = row.querySelector('.total-present-input');
+
+                if (!dateInput.value) {
+                    alert('Please fill all date fields');
+                    return;
+                }
+
+                const data = {
+                    id: rowId,
+                    date_till: dateInput.value,
+                    total_present: presentInput.value
+                };
+
+                fetch('{% url "teacher_attendance" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        savedCount++;
+                        const editBtn = row.querySelector('.edit-btn');
+                        const saveBtn = row.querySelector('.save-btn');
+                        const cancelBtn = row.querySelector('.cancel-btn');
+
+                        dateInput.setAttribute('readonly', 'readonly');
+                        presentInput.setAttribute('readonly', 'readonly');
+                        editBtn.style.display = 'inline-flex';
+                        saveBtn.style.display = 'none';
+                        cancelBtn.style.display = 'none';
+
+                        editedRows.delete(rowId);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        setTimeout(() => {
+            showNotification(`${savedCount} record(s) saved successfully`, 'success');
+        }, 500);
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 20px;
+            background: ${type === 'success' ? '#198754' : '#dc3545'};
+            color: white;
+            border-radius: 8px;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease;
+            font-weight: 600;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+
+{% endblock %}

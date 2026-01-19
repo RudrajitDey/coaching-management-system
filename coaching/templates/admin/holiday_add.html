@@ -1,0 +1,28 @@
+{% extends "dashboard/admin.html" %}
+{% load static %}
+
+{% block title %}Add Holiday{% endblock %}
+
+{% block content %}<link rel="stylesheet" href="{% static 'css/holiday_add.css' %}">
+
+<div class="form-container">
+    <h2>Add Holiday</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Date</label>
+        <input type="date" name="date" required>
+
+        <label>Day</label>
+        <input type="text" name="day" placeholder="e.g. Monday" required>
+
+        <label>Holiday Name</label>
+        <input type="text" name="name" placeholder="Holiday Name" required>
+
+        <button type="submit">Add Holiday</button>
+        <a href="{% url 'holiday_list' %}" class="cancel-btn">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

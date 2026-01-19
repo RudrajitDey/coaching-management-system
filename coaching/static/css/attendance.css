@@ -1,0 +1,373 @@
+/* ============================================
+   ATTENDANCE MANAGEMENT STYLES
+   ============================================ */
+
+:root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
+    --dark: #212529;
+    --gray: #6c757d;
+    --border-color: #e5e5e5;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+
+.attendance-container {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+
+.attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.attendance-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.attendance-header p {
+    color: var(--gray);
+    margin: 5px 0 0 0;
+    font-size: 14px;
+}
+
+.btn-add-attendance {
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.btn-add-attendance:hover {
+    background: #0b5ed7;
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   TABLE SECTION
+   ============================================ */
+
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+}
+
+.attendance-table thead {
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.attendance-table th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--dark);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.attendance-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--dark);
+    font-size: 14px;
+}
+
+.attendance-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.attendance-table tbody tr:hover {
+    background: var(--light-bg);
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 0 3px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-btn {
+    color: var(--info-color);
+}
+
+.edit-btn:hover {
+    background: rgba(13, 202, 240, 0.1);
+    color: #0a58ca;
+    transform: scale(1.1);
+}
+
+.save-btn {
+    color: var(--success-color);
+}
+
+.save-btn:hover {
+    background: rgba(25, 135, 84, 0.1);
+    color: #0d3818;
+    transform: scale(1.1);
+}
+
+.cancel-btn {
+    color: var(--danger-color);
+}
+
+.cancel-btn:hover {
+    background: rgba(220, 53, 69, 0.1);
+    color: #bd2130;
+    transform: scale(1.1);
+}
+
+/* ============================================
+   INPUT FIELDS IN TABLE
+   ============================================ */
+
+.date-till-input,
+.total-present-input {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.date-till-input:read-only,
+.total-present-input:read-only {
+    background: #f5f5f5;
+    cursor: not-allowed;
+    color: var(--dark);
+}
+
+.date-till-input:not(:read-only),
+.total-present-input:not(:read-only) {
+    background: #fff3cd;
+    border-color: #ffc107;
+}
+
+.date-till-input:focus,
+.total-present-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablet Devices (768px - 1024px) */
+@media (max-width: 1024px) {
+    .attendance-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-add-attendance {
+        align-self: flex-start;
+    }
+}
+
+/* Mobile Devices (480px - 768px) */
+@media (max-width: 768px) {
+    .attendance-container {
+        padding: 15px;
+    }
+
+    .attendance-header h1 {
+        font-size: 22px;
+    }
+
+    /* Table becomes scrollable */
+    .table-wrapper {
+        border: none;
+        box-shadow: none;
+    }
+
+    .attendance-table {
+        font-size: 12px;
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 10px 8px;
+    }
+
+    .btn-action {
+        padding: 6px;
+        font-size: 14px;
+        margin: 0 2px;
+    }
+
+    .date-till-input,
+    .total-present-input {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+}
+
+/* Small Mobile Devices (320px - 480px) */
+@media (max-width: 480px) {
+    .attendance-container {
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .attendance-header {
+        gap: 12px;
+    }
+
+    .attendance-header h1 {
+        font-size: 18px;
+    }
+
+    .attendance-header p {
+        font-size: 12px;
+    }
+
+    .btn-add-attendance {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+    }
+
+    .attendance-header div {
+        width: 100%;
+    }
+
+    .attendance-table th {
+        font-size: 10px;
+        padding: 8px 4px;
+    }
+
+    .attendance-table td {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+
+    .btn-action {
+        padding: 6px;
+        font-size: 14px;
+        margin: 0 2px;
+    }
+
+    .date-till-input,
+    .total-present-input {
+        font-size: 11px;
+        padding: 6px 6px;
+    }
+}
+
+/* Extra Large Screens (1440px+) */
+@media (min-width: 1440px) {
+    .attendance-container {
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus states for keyboard navigation */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+    .attendance-table th {
+        border: 2px solid var(--dark);
+    }
+
+    .date-till-input,
+    .total-present-input {
+        border-width: 2px;
+    }
+
+    .btn-add-attendance {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

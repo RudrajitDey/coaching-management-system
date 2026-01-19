@@ -1,0 +1,233 @@
+{% extends "dashboard/admin.html" %}
+{% block title %}All Students{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-container {
+        margin: 30px 0;
+    }
+
+    h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg, #6e27ff, #35b8ff);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .add-btn {
+        margin-bottom: 20px;
+    }
+
+    .add-btn a {
+        background: linear-gradient(135deg, #6e27ff, #b983ff);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: 0.3s;
+    }
+
+    .add-btn a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(110, 39, 255, 0.3);
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: linear-gradient(135deg, #6e27ff, #b983ff);
+        color: white;
+    }
+
+    th {
+        padding: 18px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 15px 18px;
+        border-bottom: 1px solid #eee;
+    }
+
+    tbody tr:hover {
+        background: #f8f9ff;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: 0.3s;
+    }
+
+    .btn-edit {
+        background: #1d8cf8;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #1568c0;
+        transform: translateY(-2px);
+    }
+
+    .btn-delete {
+        background: #ff5f6d;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #d63447;
+        transform: translateY(-2px);
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+        font-size: 16px;
+    }
+
+    .sr-only {
+        display: none;
+    }
+
+    .filter-container {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .filter-container label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .filter-container select {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .filter-container select:focus {
+        outline: none;
+        border-color: #6e27ff;
+        box-shadow: 0 0 0 3px rgba(110, 39, 255, 0.1);
+    }
+
+    .filter-container button {
+        background: #6e27ff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .filter-container button:hover {
+        background: #5a1ecc;
+    }
+</style>
+
+<div class="page-container">
+    <h2>All Students</h2>
+
+    <div class="add-btn">
+        <a href="{% url 'student_signup' %}">+ Add New Student</a>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-container">
+        <label for="class-filter">Filter by Class:</label>
+        <select id="class-filter" onchange="filterByClass(this.value)">
+            <option value="">All Classes</option>
+            {% for student_class in all_classes %}
+                {% if student_class %}
+                    <option value="{{ student_class }}"
+                        {% if student_class == selected_class %}selected{% endif %}>
+                        {{ student_class }}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container">
+        {% if students %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Username</th>
+                        <th>Class</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ student.username }}</td>
+                            <td>{{ student.student_class|default:"Not Assigned" }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{% url 'edit_student' student.id %}" class="btn btn-edit">Edit</a>
+                                    <a href="{% url 'delete_student' student.id %}" class="btn btn-delete">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">
+                <p>No Students found.
+                    <a href="{% url 'student_signup' %}">Create one now</a>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function filterByClass(studentClass) {
+    if (studentClass) {
+        window.location.href = '?student_class=' + encodeURIComponent(studentClass);
+    } else {
+        window.location.href = '{% url "all_students" %}';
+    }
+}
+</script>
+
+{% endblock %}

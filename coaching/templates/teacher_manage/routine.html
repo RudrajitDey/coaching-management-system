@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Routine</title>
+    <link rel="stylesheet" href="{% static 'css/routine.css' %}">
+</head>
+<body>
+
+<div class="routine-container">
+
+    <h2>Class Routine</h2>
+
+    <div class="filter-container">
+        <label for="day-filter">Filter by Day:</label>
+        <select id="day-filter" onchange="filterByDay(this.value)">
+            <option value="">All Days</option>
+            {% for day in days %}
+                <option value="{{ day.0 }}" {% if day.0 == selected_day %}selected{% endif %}>{{ day.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <table class="routine-table">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Batch</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for routine in routines %}
+            <tr>
+                <td>{{ routine.class_name }}</td>
+                <td>{{ routine.batch }}</td>
+                <td>
+                        {{ routine.days }}
+                    </td>
+                <td>
+                    {{ routine.start_time|time:"H:i" }} -
+                    {{ routine.end_time|time:"H:i" }}
+                </td>
+                <td>{{ routine.subject }}</td>
+                <td>{{ routine.teacher }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="no-data">No routine available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+function filterByDay(day) {
+    if (day) {
+        window.location.href = '?day=' + encodeURIComponent(day);
+    } else {
+        window.location.href = '{% url "routine" %}';
+    }
+}
+</script>
+
+</body>
+</html>
